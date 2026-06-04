@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Слово</title>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/i18next@23/dist/umd/i18next.min.js"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/i18next-browser-languagedetector@7/dist/umd/i18nextBrowserLanguageDetector.min.js"></script> 
+  <script src="https://accounts.google.com/gsi/client" async></script> 
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;500;600;700&family=Cormorant+Infant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet"> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet"> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> 
+  <link rel="icon" type="image/png" sizes="32x32" href="images/Frame 10.png">
+  <link rel="stylesheet" href="../css/index.css">
+  
+</head>
+<body>
+
+
+<header>
+  <div class="logo" data-i18n="site_title">Слово</div>
+  <nav>
+    <a href="#our-story"  data-i18n="nav_about">Про нас</a>
+    <a href="#works"      data-i18n="nav_works">Слово</a>
+    <a href="#membership" data-i18n="nav_membership">Членство</a>
+    <a href="#" id="openSignIn"     data-i18n="nav_signin">Увійти</a>
+    <a href="#" id="openGetStarted" data-i18n="nav_register">Реєстрація</a>
+    <div class="languages-item">
+      <div class="languages-toggle-wrapper">
+        <input type="checkbox" id="lang-switch" class="lang-switch-input" hidden>
+        <label for="lang-switch" class="lang-switch-label">
+          <span class="lang-text ukr">Укр</span>
+          <span class="lang-text eng">Eng</span>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1 data-i18n="site_title">Слово</h1>
+  <a href="reading.html" class="btnread" data-i18n="hero_btn">Читати</a>
+
+  <button id="toggle-chat" title="Відкрити чат">?</button>
+
+  <div id="chat-panel" class="normal-mode">
+    <div id="chat-header">
+      <span id="chat-title" data-i18n="chat_ask" style="font-family:'Cormorant SC',serif;font-size:0.88rem;letter-spacing:0.08em;color:rgba(255,255,255,0.9);">Запитай мене</span>
+      <button id="close-chat" title="Закрити">✕</button>
+    </div>
+    <div id="messages"></div>
+    <div id="input-area">
+      <input id="input" class="chat-input" data-i18n-placeholder="chat_placeholder" placeholder="Напиши питання…" autocomplete="off"/>
+      <button id="send" aria-label="Надіслати"></button>
+    </div>
+  </div>
+</section>
+
+<div class="modern-quote-bar">
+  <div class="quote-track">
+    <span class="quote-item" data-i18n="quote_kostenko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_symonenko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_stus"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_ukrainka"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_franko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_kostenko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_symonenko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_stus"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_ukrainka"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_franko"></span>
+  </div>
+</div>
+
+<div class="ourstory1">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 text-center">
+        <section id="our-story" style="padding-top:0;margin-top:0;">
+          <span class="ourstory-eyebrow" style="display:block;text-align:center;padding-left:0;">
+            <span style="display:inline-block;width:18px;height:1.5px;background:#C67081;vertical-align:middle;margin-right:10px;"></span>
+            <span data-i18n="about_eyebrow">Про нас</span>
+            <span style="display:inline-block;width:18px;height:1.5px;background:#C67081;vertical-align:middle;margin-left:10px;"></span>
+          </span>
+          <h2 class="text-center" style="margin-left:auto;margin-right:auto;" data-i18n="about_title">Місце, де кожен голос важливий</h2>
+          <p style="margin:0 auto 18px;text-align:center;" data-i18n="about_p1">Ідея цього сайту виникла, коли я натрапила на статті англійською мовою.</p>
+          <p style="margin:0 auto 18px;text-align:center;" data-i18n="about_p2">Ці матеріали надихнули мене створити платформу для публікації освітніх матеріалів, поезії та художніх творів.</p>
+          <div class="ourstory-highlight" style="margin:36px auto 0;text-align:left;" data-i18n="about_highlight">Ми прагнемо створити простір, де кожен може знайти натхнення та знання.</div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<div class="works1">
+  <div class="container-xxl py-5">
+    <div class="container">
+      <div class="row g-5 justify-content-center">
+        <div class="col-lg-8 col-xl-7 text-center">
+          <section id="works" class="section">
+            <h2 class="mb-4" data-i18n="works_title">Наші роботи</h2>
+            <h5 class="lead mb-4" data-i18n="works_desc">На нашій платформі ви можете знайти різноманітні освітні статті, поезію та художні твори.</h5>
+            <h6 data-i18n="works_sub">Ми запрошуємо вас поділитися своїми творами та ідеями.</h6>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modern-quote-bar-duplicate-again">
+  <div class="quote-track">
+    <span class="quote-item" data-i18n="quote_kostenko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_symonenko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_stus"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_ukrainka"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_franko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_kostenko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_symonenko"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_stus"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_ukrainka"></span><span class="quote-separator">│</span>
+    <span class="quote-item" data-i18n="quote_franko"></span>
+  </div>
+</div>
+
+<div class="membership" id="membership">
+  <div class="membership-inner">
+    <span class="membership-badge" data-i18n="membership_badge">Ексклюзивний доступ</span>
+    <h2 data-i18n="membership_title">Стань частиною нашої спільноти</h2>
+    <p class="membership-desc" data-i18n="membership_desc">Отримуйте необмежений доступ до якісного контенту.</p>
+    <ul class="membership-perks">
+      <li data-i18n="perk1">Ексклюзивні статті та твори</li>
+      <li data-i18n="perk2">Закриті вебінари</li>
+      <li data-i18n="perk3">Поради від експертів</li>
+      <li data-i18n="perk4">Розвиток кар'єри</li>
+      <li data-i18n="perk5">Спільнота авторів</li>
+      <li data-i18n="perk6">Ранній доступ до оновлень</li>
+    </ul>
+    <a class="membership-btn" href="#" data-i18n="membership_btn">Стати членом</a>
+  </div>
+</div>
+
+<section class="Popular-Articles">
+  <div class="container">
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-8 text-center">
+        <span class="ourstory-eyebrow" style="display:block;margin-bottom:14px;">
+          <span style="display:inline-block;width:18px;height:1.5px;background:#C67081;vertical-align:middle;margin-right:10px;"></span>
+          <span data-i18n="popular_eyebrow">Читають зараз</span>
+          <span style="display:inline-block;width:18px;height:1.5px;background:#C67081;vertical-align:middle;margin-left:10px;"></span>
+        </span>
+        <h2 class="section-title" data-i18n="popular_title">Популярні статті</h2>
+      </div>
+    </div>
+    <div class="row g-4 justify-content-center" id="popularArticles">
+      <div class="col-12 text-center py-5" id="loading-articles">
+        <div class="spinner-border" style="color:#C67081;" role="status">
+          <span class="visually-hidden">Завантаження...</span>
+        </div>
+        <p class="mt-3" style="font-family:'Cormorant Infant',serif;color:rgba(46,63,85,.5);" data-i18n="loading_text">Завантажуємо популярні статті…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-wave">
+  <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,40 C240,85 480,0 720,45 C960,90 1200,10 1440,50 L1440,90 L0,90 Z" fill="#BFD0DC" fill-opacity="0.35"/>
+    <path d="M0,55 C200,10 400,80 600,40 C800,0 1000,70 1200,35 C1320,18 1380,50 1440,42 L1440,90 L0,90 Z" fill="#EAC1CB" fill-opacity="0.45"/>
+    <path d="M0,65 C180,30 360,80 540,55 C720,30 900,75 1080,50 C1260,25 1360,62 1440,55 L1440,90 L0,90 Z" fill="#F9F9F9"/>
+  </svg>
+</div>
+
+<section class="Reviews">
+  <h2 class="reviews-title" data-i18n="reviews_title">Відгуки наших читачів</h2>
+  <div class="reviews-grid">
+    <div class="review-bubble b-blue">
+      <svg class="review-clip" viewBox="0 0 34 50" fill="none"><path d="M17 4 C10 4 5 9 5 16 L5 36 C5 41 9 46 17 46 C25 46 29 41 29 36 L29 18 C29 14 26 10 21 10 C16 10 13 14 13 18 L13 36 C13 38 14.5 40 17 40 C19.5 40 21 38 21 36 L21 16" stroke="#8fa5b5" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+      <span data-i18n="review1_text">«Слово» - чудова платформа для вчителів та учнів.</span>
+      <span class="review-author" data-i18n="review1_author">Наталія Шевченко · Вчителька</span>
+    </div>
+    <div class="review-bubble b-beige">
+      <span data-i18n="review2_text">Я отримала багато позитивних відгуків на свої твори.</span>
+      <span class="review-author" data-i18n="review2_author">Марія Василенко · Письменниця</span>
+    </div>
+    <div class="review-bubble b-cream">
+      <div class="review-bow">
+        <svg viewBox="0 0 54 38" fill="none" width="54" height="38">
+          <path d="M27 19 C22 14 8 8 4 14 C0 20 14 24 27 19Z" fill="#EAC1CB" stroke="#C67081" stroke-width="1"/>
+          <path d="M27 19 C32 14 46 8 50 14 C54 20 40 24 27 19Z" fill="#EAC1CB" stroke="#C67081" stroke-width="1"/>
+          <path d="M27 19 C22 24 8 30 4 24 C0 18 14 14 27 19Z" fill="#F2D8DF" stroke="#C67081" stroke-width="1"/>
+          <path d="M27 19 C32 24 46 30 50 24 C54 18 40 14 27 19Z" fill="#F2D8DF" stroke="#C67081" stroke-width="1"/>
+          <circle cx="27" cy="19" r="4" fill="#C67081"/>
+        </svg>
+      </div>
+      <span data-i18n="review3_text">«Слово» надихнули мене на власні творчі експерименти.</span>
+      <span class="review-author" data-i18n="review3_author">Сергій Ковальчук · Студент</span>
+    </div>
+  </div>
+</section>
+
+<div class="newsletter-section">
+  <div class="container-xxl py-5 h-100">
+    <div class="container h-100">
+      <div class="row g-5 align-items-center h-100">
+        <div class="col-lg-6 d-none d-lg-block"></div>
+        <div class="col-lg-6">
+          <div class="newsletter-form-wrapper">
+            <h3 data-i18n="newsletter_title">Підпишіться на розсилку</h3>
+            <p data-i18n="newsletter_desc">Нові статті, твори та навчальні матеріали — прямо на пошту.</p>
+            <form id="newsletterForm" novalidate>
+              <div class="row g-3">
+                <div class="col-12">
+                  <input type="text" class="form-control" id="nlName" data-i18n-placeholder="newsletter_name_placeholder" placeholder="Ваше ім'я" required autocomplete="given-name">
+                </div>
+                <div class="col-12">
+                  <input type="email" class="form-control" id="nlEmail" data-i18n-placeholder="newsletter_email_placeholder" placeholder="Ваш email" required autocomplete="email">
+                </div>
+                <div class="col-12">
+                  <button class="btn w-100 py-3" type="submit" data-i18n="newsletter_btn">Підписатися</button>
+                </div>
+              </div>
+            </form>
+            <div id="newsletterMessage" class="mt-4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalGetStarted" class="modal fade" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <button type="button" class="modal-close-btn" id="closeGetStarted" aria-label="Закрити">✕</button>
+      <h2 data-i18n="reg_title">Приєднатися до освітнього сайту</h2>
+
+      <div class="auth-social-row">
+        <button class="auth-social-btn g-btn" id="googleSignUpButton">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M47.5 24.6c0-1.6-.1-3.1-.4-4.6H24v8.7h13.2c-.6 3-2.4 5.5-5 7.2v6h8.1c4.7-4.4 7.2-10.8 7.2-17.3z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-8.1-6c-2.2 1.5-5 2.3-7.8 2.3-6 0-11-4-12.8-9.5H2.9v6.2C6.9 42.9 14.9 48 24 48z"/><path fill="#FBBC05" d="M11.2 29c-.5-1.5-.8-3.1-.8-4.8s.3-3.3.8-4.8v-6.2H2.9C1.1 16.8 0 20.3 0 24s1.1 7.2 2.9 10.4l8.3-5.4z"/><path fill="#EA4335" d="M24 9.5c3.4 0 6.4 1.2 8.8 3.4l6.5-6.5C35.9 2.7 30.4 0 24 0 14.9 0 6.9 5.1 2.9 13.6l8.3 6.2C12.9 13.5 18 9.5 24 9.5z"/></svg>
+          Google
+        </button>
+      </div>
+
+      <div class="auth-divider">
+        <span></span><span data-i18n="or_text">або</span><span></span>
+      </div>
+
+      <button class="auth-btn-main" id="openEmailSignUp" data-i18n="reg_email">
+        Реєстрація через електронну пошту
+      </button>
+
+      <p class="auth-switch-text">
+        <span data-i18n="reg_has_account">Вже маєте обліковий запис?</span>
+        <a href="#" id="switchToSignIn" data-i18n="reg_signin_link">Увійти</a>
+      </p>
+      <p class="terms" data-i18n="reg_terms">
+        Натискаючи «Реєстрація», ви погоджуєтеся з <a href="#">Умовами використання</a>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div id="modalSignIn" class="modal fade" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <button type="button" class="modal-close-btn" id="closeSignIn" aria-label="Закрити">✕</button>
+      <h2 data-i18n="signin_title">Увійти в систему</h2>
+
+      <div id="loginMessage" class="auth-message" style="display:none;"></div>
+
+      <div class="auth-social-row">
+        <button class="auth-social-btn g-btn" id="googleSignInBtn">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M47.5 24.6c0-1.6-.1-3.1-.4-4.6H24v8.7h13.2c-.6 3-2.4 5.5-5 7.2v6h8.1c4.7-4.4 7.2-10.8 7.2-17.3z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-8.1-6c-2.2 1.5-5 2.3-7.8 2.3-6 0-11-4-12.8-9.5H2.9v6.2C6.9 42.9 14.9 48 24 48z"/><path fill="#FBBC05" d="M11.2 29c-.5-1.5-.8-3.1-.8-4.8s.3-3.3.8-4.8v-6.2H2.9C1.1 16.8 0 20.3 0 24s1.1 7.2 2.9 10.4l8.3-5.4z"/><path fill="#EA4335" d="M24 9.5c3.4 0 6.4 1.2 8.8 3.4l6.5-6.5C35.9 2.7 30.4 0 24 0 14.9 0 6.9 5.1 2.9 13.6l8.3 6.2C12.9 13.5 18 9.5 24 9.5z"/></svg>
+          Google
+        </button>
+      </div>
+
+      <div class="auth-divider">
+        <span></span><span data-i18n="or_text">або</span><span></span>
+      </div>
+
+      <form id="modalSignInForm">
+        <div class="auth-field">
+          <label for="loginEmail" data-i18n="signin_email">Електронна пошта:</label>
+          <input type="email" id="loginEmail" name="email" autocomplete="email"
+                 data-i18n-placeholder="signin_email_ph" placeholder="Ваша електронна пошта" required>
+        </div>
+        <div class="auth-field">
+          <label for="loginPassword" data-i18n="signin_password">Пароль:</label>
+          <input type="password" id="loginPassword" name="password" autocomplete="current-password"
+                 data-i18n-placeholder="signin_password_ph" placeholder="Ваш пароль" required>
+        </div>
+        <button type="submit" class="auth-btn-main" data-i18n="signin_btn">Увійти</button>
+      </form>
+
+      <p class="auth-switch-text mt-2">
+        <a href="#" id="openForgotPassword" data-i18n="signin_forgot">Забули пароль?</a>
+      </p>
+      <p class="auth-switch-text">
+        <span data-i18n="signin_no_account">Не маєте облікового запису?</span>
+        <a href="#" id="switchToRegister" data-i18n="signin_register_link">Зареєструватися</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div id="emailSignUpModal" role="dialog" aria-modal="true" aria-labelledby="emailRegTitle">
+  <div class="email-modal-card">
+    <button type="button" class="modal-close-btn" id="closeEmailSignUp" aria-label="Закрити">✕</button>
+    <h2 id="emailRegTitle" data-i18n="emailreg_title">Реєстрація через електронну пошту</h2>
+
+    <div id="regMessage" class="auth-message" style="display:none;"></div>
+
+    <div class="auth-field">
+      <label for="signUpEmail" data-i18n="emailreg_email_label">Електронна пошта</label>
+      <input type="email" id="signUpEmail" autocomplete="email"
+             data-i18n-placeholder="emailreg_email_ph" placeholder="Електронна пошта" required>
+    </div>
+    <div class="auth-field">
+      <label for="signUpPassword" data-i18n="emailreg_password_label">Пароль</label>
+      <input type="password" id="signUpPassword" autocomplete="new-password"
+             data-i18n-placeholder="emailreg_password_ph" placeholder="Пароль (мін. 8 символів)" required>
+      <div id="pwStrengthBar" style="height:3px;border-radius:2px;margin-top:5px;transition:width .3s,background .3s;width:0;background:#eee"></div>
+      <div id="pwStrengthLabel" style="font-size:.75rem;font-family:'Cormorant Infant',serif;color:#888;min-height:16px;margin-top:2px;"></div>
+    </div>
+    <div class="auth-field">
+      <label for="confirmPassword" data-i18n="emailreg_confirm_label">Підтвердження пароля</label>
+      <input type="password" id="confirmPassword" autocomplete="new-password"
+             data-i18n-placeholder="emailreg_confirm_ph" placeholder="Повторіть пароль" required>
+    </div>
+
+    <button id="submitEmailSignUp" class="auth-btn-main" data-i18n="emailreg_btn">Зареєструватися</button>
+
+    <p class="auth-switch-text">
+      <span data-i18n="emailreg_has_account">Вже маєте обліковий запис?</span>
+      <a href="#" id="switchEmailToSignIn" data-i18n="emailreg_signin">Увійти</a>
+    </p>
+  </div>
+</div>
+
+<div id="resetPasswordModal" class="modal fade" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <button type="button" class="modal-close-btn" id="closeReset" aria-label="Закрити">✕</button>
+      <h2 data-i18n="reset_title">Відновлення пароля</h2>
+      <div class="auth-field">
+        <label for="resetEmail" data-i18n="reset_label">Електронна пошта</label>
+        <input type="email" id="resetEmail" data-i18n-placeholder="reset_placeholder"
+               placeholder="Введіть email для відновлення пароля" required>
+      </div>
+      <button type="button" id="submitResetPassword" class="auth-btn-main" data-i18n="reset_btn">Відновити пароль</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="#our-story"  data-i18n="footer_about">Про нас</a>
+  <a href="#works"      data-i18n="footer_works">Слово</a>
+  <a href="#membership" data-i18n="footer_membership">Членство</a>
+  <a href="write.html"  data-i18n="footer_write">Писати</a>
+  <a href="#"           data-i18n="footer_career">Кар'єра</a>
+  <a href="#"           data-i18n="footer_privacy">Конфіденційність</a>
+  <a href="#"           data-i18n="footer_terms">Умови</a>
+  <a href="#"           data-i18n="footer_help">Допомога</a>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="../js/index.js"></script>
+
+</body>
+</html>

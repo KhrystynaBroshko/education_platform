@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Слово — Читати</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;500;600;700&family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/Frame 10.png">
+  <link rel="stylesheet" href="../css/reading.css">
+</head>
+<body>
+<div class="bg-deco"><span></span><span></span><span></span><span></span></div>
+<div class="rp" id="rp"></div>
+
+<div id="sidebar" class="sdb">
+  <div class="sdh"><h4 data-i18n="menu">Меню</h4><span id="closeSidebar" class="cbt">×</span></div>
+  <div id="sidebarGuestNote" class="sd-guest-note" style="display:none">
+    <span data-i18n="loginPrompt">Увійдіть, щоб отримати доступ до всіх функцій</span>
+    <a href="#" id="sidebarLoginLink" data-i18n="login">Увійти</a>
+  </div>
+  <ul class="sdm" id="sidebarMenu">
+    <li><a href="index.html" class="ml active"><span class="mi"><i class="fas fa-home"></i></span> <span data-i18n="home">Головна</span></a></li>
+    <li id="sdItemAccount"><a href="user.html" class="ml"><span class="mi"><i class="fas fa-user"></i></span> <span data-i18n="account">Акаунт</span></a></li>
+    <li id="sdItemArticles"><a href="my-articles.html" class="ml"><span class="mi"><i class="fas fa-pen-nib"></i></span> <span data-i18n="myArticles">Мої статті</span></a></li>
+    <li id="sdItemStats"><a href="statistics.html" class="ml"><span class="mi"><i class="fas fa-chart-line"></i></span> <span data-i18n="statistics">Статистика</span></a></li>
+    <li><a href="write.html" class="ml"><span class="mi"><i class="fas fa-edit"></i></span> <span data-i18n="write">Написати</span></a></li>
+    <div class="ssp"></div>
+    <li id="sdItemLogout"><a href="#" id="logoutLink" class="ml lo"><span class="mi"><i class="fas fa-sign-out-alt"></i></span> <span data-i18n="logout">Вийти</span></a></li>
+  </ul>
+  <div class="sdf">
+    <div class="sdu">
+      <div class="sda" id="sidebarAvatar"></div>
+      <div><div class="sdun" id="sidebarName" data-i18n-empty="guest">Гість</div><div class="sdur" id="sidebarRole" data-i18n="reader">Читач</div></div>
+    </div>
+  </div>
+</div>
+<div id="sidebarOverlay" class="ov"></div>
+
+<div class="hdr">
+  <div class="lg">
+    <div class="mbtn" id="menuButton"><i class="fas fa-bars"></i></div>
+    <a href="index.html" class="stl"><span class="stt">Слово</span></a>
+  </div>
+  <div class="rg">
+    <div class="src"><i class="fas fa-search sic"></i><input type="text" id="searchInput" class="sri" data-i18n-ph="search" placeholder="Пошук статей…"></div>
+    <div class="ibtn" id="writeButton" data-i18n-title="write" title="Написати"><i class="fas fa-pen"></i></div>
+    <div class="ibtn-wrap">
+      <div class="ibtn" id="notificationBell" title="Сповіщення"><i class="fas fa-bell"></i><span class="nbdg" id="notifBadge" style="display:none"></span></div>
+      <div id="notifPanel" class="notif-panel">
+        <div class="notif-hdr">
+          <span data-i18n="notifications">Сповіщення</span>
+          <span id="markAllRead" data-i18n="markRead">Прочитати всі</span>
+        </div>
+        <div class="notif-list" id="notifList"></div>
+      </div>
+    </div>
+    <button class="lang-btn" id="langToggle"><i class="fas fa-globe"></i> <span id="langLabel">EN</span></button>
+    <div class="ui" id="userInfo">
+      <div class="uav" id="userAvatar"><i class="fas fa-user" style="font-size:.78rem;opacity:.55"></i></div>
+      <span class="unm" id="userName" data-i18n="loginShort">Увійти</span>
+    </div>
+  </div>
+</div>
+
+<section class="flt">
+  <div class="container">
+    <div class="row g-3 align-items-end">
+      <div class="col-6 col-md-3">
+        <label data-i18n="category">Категорія</label>
+        <select class="form-select" id="categoryFilter">
+          <option value="all" data-i18n="all">Усі</option>
+          <option value="education" data-i18n="education">Освіта</option>
+          <option value="career" data-i18n="career">Кар'єра</option>
+          <option value="productivity" data-i18n="productivity">Продуктивність</option>
+          <option value="nauka" data-i18n="science">Наука</option>
+          <option value="poezia" data-i18n="poetry">Поезія</option>
+          <option value="tvory" data-i18n="fiction">Художні твори</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-3">
+        <label data-i18n="author">Автор</label>
+        <select class="form-select" id="authorFilter"><option value="all" data-i18n="all">Усі</option></select>
+      </div>
+      <div class="col-6 col-md-2">
+        <label data-i18n="sort">Сортування</label>
+        <select class="form-select" id="sortFilter">
+          <option value="newest" data-i18n="newest">Найновіші</option>
+          <option value="popular" data-i18n="popular">Популярні</option>
+          <option value="az" data-i18n="az">А → Я</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-2 d-flex align-items-end justify-content-end gap-2">
+        <div class="vtg">
+          <button class="vb active" id="gridView"><i class="fas fa-th-large"></i></button>
+          <button class="vb" id="listView"><i class="fas fa-list"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="as">
+  <div class="hero-wrap">
+    <div class="container" style="position:relative;z-index:1">
+      <div class="hero-label" data-i18n="heroLabel">Платформа для авторів</div>
+      <h1 class="hero-title" id="welcomeMessage">Доброго <em>дня!</em></h1>
+      <p class="hero-sub" data-i18n="heroSub">Тут живуть думки, поезія і знання — обирай те, що резонує з тобою сьогодні.</p>
+      <div class="hero-chips">
+        <span class="hero-chip" onclick="filterByCategory('poezia')"><i class="fas fa-feather-alt"></i> <span data-i18n="poetry">Поезія</span></span>
+        <span class="hero-chip" onclick="filterByCategory('nauka')"><i class="fas fa-flask"></i> <span data-i18n="science">Наука</span></span>
+        <span class="hero-chip" onclick="filterByCategory('tvory')"><i class="fas fa-book-open"></i> <span data-i18n="fiction">Твори</span></span>
+        <span class="hero-chip" onclick="filterByCategory('education')"><i class="fas fa-graduation-cap"></i> <span data-i18n="education">Освіта</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="container">
+      <div class="stat-items">
+        <div class="stat-item"><div class="stat-val" id="statTotal">—</div><div class="stat-lbl"><i class="fas fa-newspaper" style="margin-right:4px"></i><span data-i18n="statArticles">Статей</span></div></div>
+        <div class="stat-item"><div class="stat-val" id="statAuthors">—</div><div class="stat-lbl"><i class="fas fa-users" style="margin-right:4px"></i><span data-i18n="statAuthors">Авторів</span></div></div>
+        <div class="stat-item"><div class="stat-val" id="statLikes">—</div><div class="stat-lbl"><i class="fas fa-heart" style="margin-right:4px"></i><span data-i18n="statLikes">Вподобань</span></div></div>
+        <div class="stat-item"><div class="stat-val" id="statFiltered">—</div><div class="stat-lbl"><i class="fas fa-filter" style="margin-right:4px"></i><span data-i18n="statSelected">Вибрано</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="accent-rule"></div>
+    <div id="goalsPanel" class="goals-panel" style="display:none">
+      <div class="goals-title"><i class="fas fa-bullseye" style="color:var(--accent)"></i> <span data-i18n="weeklyGoals">Мої цілі на тиждень</span></div>
+      <div class="goal-item">
+        <div class="goal-label"><span data-i18n="goalRead">📖 Прочитати 5 статей</span><span id="goalReadCount">0/5</span></div>
+        <div class="goal-bar"><div class="goal-fill" id="goalReadBar" style="width:0%"></div></div>
+      </div>
+      <div class="goal-item">
+        <div class="goal-label"><span data-i18n="goalLike">❤️ Вподобати статті</span><span id="goalLikeCount">0/3</span></div>
+        <div class="goal-bar"><div class="goal-fill" id="goalLikeBar" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="row g-4" id="articlesList"></div>
+  </div>
+</section>
+
+<div class="mode-bar">
+  <button class="mode-btn" id="darkModeBtn" title="Нічний режим"><i class="fas fa-moon"></i></button>
+  <button class="mode-btn" id="focusModeBtn" title="Режим читання"><i class="fas fa-eye"></i></button>
+</div>
+<button class="btt" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+<div class="tc" id="toastContainer"></div>
+
+<div id="loginModal" class="lm">
+  <div class="mc">
+    <div class="mhd">
+      <span class="mcl" id="loginCloseBtn">×</span>
+      <h2 data-i18n="login">Увійти</h2>
+      <p data-i18n="loginSub">Читати, писати, надихатись</p>
+    </div>
+    <div class="mbd">
+      <div class="mf"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" data-i18n-ph="emailPlaceholder" placeholder="Email адреса"></div>
+      <div class="mf"><i class="fas fa-lock"></i><input type="password" id="loginPassword" data-i18n-ph="passPlaceholder" placeholder="Пароль"></div>
+      <button class="lnbtn" id="loginButton" data-i18n="login">Увійти</button>
+      <div class="mdv" data-i18n="or">або</div>
+      <div class="mfl">
+        <a href="#" data-i18n="forgotPass">Забули пароль?</a>
+        <a href="register.html" class="rl"><i class="fas fa-user-plus"></i> <span data-i18n="register">Зареєструватись</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container"><p>© 2026 Слово — <span data-i18n="footerTagline">Простір для думок</span></p></div>
+</footer>
+<script src="../js/reading.js"></script>
+</body> 
+</html>

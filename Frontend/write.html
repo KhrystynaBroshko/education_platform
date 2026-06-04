@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Слово — Написати статтю</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600&family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <link rel="icon" type="image/png" sizes="32x32" href="images/Frame 10.png">
+<link rel="stylesheet" href="../css/write.css">
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div id="translateBar">
+  <i class="fas fa-language"></i>
+  <span id="tbarText">Перекласти цю сторінку?</span>
+  <button class="tbar-lang-btn" id="tbarEnBtn" onclick="translatePage('en','English')">EN</button>
+  <button class="tbar-lang-btn" id="tbarDeBtn" onclick="translatePage('de','Deutsch')">DE</button>
+  <button class="tbar-lang-btn" id="tbarPlBtn" onclick="translatePage('pl','Polski')">PL</button>
+  <button class="tbar-lang-btn" onclick="openTranslateModal()"><i class="fas fa-globe"></i> Інші мови</button>
+  <button class="tbar-lang-btn" id="tbarResetBtn" style="display:none" onclick="resetTranslation()"><i class="fas fa-undo"></i> Оригінал</button>
+  <span id="tbarSpinner"><span class="spin-ring"></span><span id="tbarPct">0%</span></span>
+  <button class="tbar-close" onclick="hideTranslateBar()" title="Закрити">×</button>
+</div>
+
+<header id="mainHeader">
+  <a href="index.html" class="logo">Слово</a>
+  <nav class="header-nav">
+    <span class="draft-badge" id="draftBadge">Збережено</span>
+    <div class="security-indicator" id="securityIndicator">
+      <i class="fas fa-shield-alt"></i>
+      <span id="secIndicatorText">Безпека</span>
+    </div>
+    <a href="reading.html" class="nav-link-btn nav-link-outline"><i class="fas fa-book-open"></i> Читати</a>
+    <a href="index.html"   class="nav-link-btn nav-link-solid"><i class="fas fa-arrow-left"></i> Вихід</a>
+  </nav>
+</header>
+
+<main id="mainContent">
+  <div class="editor-wrap">
+
+    <div class="editor-head">
+      <h1>Нова стаття</h1>
+      <p>Поділіться своїми думками, знаннями або творчістю</p>
+    </div>
+
+    <div class="meta-fields">
+      <div class="field-group">
+        <label class="field-label">Псевдонім</label>
+        <input type="text" id="alias" class="field-input" placeholder="Ваш псевдонім" maxlength="60">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Назва статті</label>
+        <input type="text" id="title" class="field-input" placeholder="Яскрава назва вашої статті…" maxlength="120">
+      </div>
+    </div>
+
+    <div class="meta-fields" style="grid-template-columns:1fr 1fr;margin-bottom:0">
+      <div class="field-group">
+        <label class="field-label">Категорія</label>
+        <select id="category" class="field-select">
+          <option value="">Оберіть категорію</option>
+          <option value="education">Освіта</option>
+          <option value="career">Кар'єра</option>
+          <option value="productivity">Продуктивність</option>
+          <option value="nauka">Наука</option>
+          <option value="poezia">Поезія</option>
+          <option value="tvory">Художні твори</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Короткий опис</label>
+        <input type="text" id="description" class="field-input" placeholder="2–3 речення про статтю…" maxlength="240">
+      </div>
+    </div>
+
+    <div class="editor-sep"></div>
+   <div class="toolbar-wrap">
+      <div class="toolbar-group">
+        <button class="tb-btn" onclick="fmt('bold')"><i class="fas fa-bold"></i></button>
+        <button class="tb-btn" onclick="fmt('italic')"><i class="fas fa-italic"></i></button>
+        <button class="tb-btn" onclick="fmt('underline')"><i class="fas fa-underline"></i></button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button class="tb-btn" onclick="fmt('header')"><i class="fas fa-heading"></i> <span>Заголовок</span></button>
+        <button class="tb-btn" onclick="fmt('quote')"><i class="fas fa-quote-left"></i> <span>Цитата</span></button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button class="tb-btn" onclick="addImage()"><i class="fas fa-image"></i> <span>Фото</span></button>
+        <button class="tb-btn" onclick="openCamera()"><i class="fas fa-camera"></i> <span>Камера</span></button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button class="tb-btn" id="voice-btn" onclick="toggleVoiceInput()"><i class="fas fa-microphone"></i> <span>Диктувати</span></button>
+        <button class="tb-btn" onclick="openMathModal()"><i class="fas fa-square-root-alt"></i> <span>Формула</span></button>
+        <button class="tb-btn" onclick="openChartModal()"><i class="fas fa-chart-bar"></i> <span>Графік</span></button>
+        <button class="tb-btn" onclick="openDrawingModal()"><i class="fas fa-paint-brush"></i> <span>Малюнок</span></button>
+        <button class="tb-btn tb-btn-accent" onclick="openScientificAssistant()"><i class="fas fa-calculator"></i> <span>Асистент</span></button>
+        <button class="tb-btn tb-btn-security" id="secBtn" onclick="openSecurityModal()"><i class="fas fa-shield-alt"></i> <span>Безпека</span></button>
+        <button class="tb-btn" onclick="openTranslateModal()"><i class="fas fa-language"></i> <span>Перекласти</span></button>
+      </div>
+      
+      <div class="toolbar-divider"></div>
+      
+      <div class="toolbar-group">
+       <label id="aiToggleBtn" class="tb-btn" style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; transition: all 0.3s ease; position: relative;">
+  <input type="checkbox" id="aiAllowCheck" style="display: none;">
+  <i class="fas fa-robot" id="aiIcon" style="transition: transform 0.3s ease;"></i>
+  <span id="aiToggleText">Дозволити AI-покращення</span>
+</label>
+      </div>
+    </div>
+
+    <div class="editor-body" id="editorText" contenteditable="true" spellcheck="true"></div>
+    <div class="char-limit-bar"><div class="char-limit-fill" id="charFill"></div></div>
+    <div class="editor-footer">
+      <span class="word-count" id="wordCount">0 слів</span>
+      <span class="read-time"  id="readTime">~0 хв читання</span>
+    </div>
+
+    <div class="publish-row">
+      <button class="draft-btn"   onclick="saveDraft()"><i class="fas fa-save"></i> Зберегти чернетку</button>
+      <button class="publish-btn" onclick="publishArticle()"><i class="fas fa-paper-plane"></i> Надіслати на перевірку</button>
+    </div>
+    <div style="height:60px"></div>
+  </div>
+</main>
+
+<div class="toast-container" id="toastWrap"></div>
+
+<div class="modal-overlay" id="mathModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeMathModal()">×</button>
+    <div class="modal-title">Математична формула</div>
+    <label class="field-label" style="display:block;margin-bottom:6px">LaTeX вираз</label>
+    <textarea class="modal-textarea" id="mathInput" placeholder="Напр.: \frac{a}{b}, x^2, \sum_{i=1}^{n} i"></textarea>
+    <div class="modal-hint">Підтримуються: x^2 · \sqrt{x} · \frac{a}{b} · \sin(x) · \int_{0}^{1} x\,dx</div>
+    <div class="modal-preview" id="mathPreview"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-primary"   onclick="insertMath()"><i class="fas fa-check"></i> Вставити</button>
+      <button class="modal-btn modal-btn-secondary" onclick="closeMathModal()">Скасувати</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="chartModal">
+  <div class="modal-box wide">
+    <button class="modal-close-btn" onclick="closeChartModal()">×</button>
+    <div class="modal-title">Створити графік</div>
+    <label class="field-label" style="display:block;margin-bottom:6px">Тип</label>
+    <select class="modal-select" id="chartType">
+      <option value="line">Лінійний графік</option>
+      <option value="bar">Стовпчикова діаграма</option>
+      <option value="pie">Кругова діаграма</option>
+      <option value="function">Математична функція</option>
+    </select>
+    <div id="chartDataSection">
+      <label class="field-label" style="display:block;margin-bottom:6px">Дані</label>
+      <textarea class="modal-textarea" id="chartData" placeholder="Місяць1:120, Місяць2:145, Місяць3:98"></textarea>
+      <div class="modal-hint">Формат: назва:число, назва:число</div>
+    </div>
+    <div id="functionSection" style="display:none">
+      <label class="field-label" style="display:block;margin-bottom:6px">Функція</label>
+      <input class="modal-input" id="mathFunction" placeholder="Напр.: x*x або sin(x)">
+      <div class="func-range-row">
+        <input class="modal-input" type="number" id="xMin" value="-10" placeholder="Від">
+        <input class="modal-input" type="number" id="xMax" value="10"  placeholder="До">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-primary"   onclick="createChart()"><i class="fas fa-chart-bar"></i> Створити</button>
+      <button class="modal-btn modal-btn-secondary" onclick="closeChartModal()">Скасувати</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="drawingModal">
+  <div class="modal-box wide">
+    <button class="modal-close-btn" onclick="closeDrawingModal()">×</button>
+    <div class="modal-title">Намалювати ілюстрацію</div>
+    <div class="color-palette" id="colorPalette">
+      <div class="color-swatch active" style="background:#2D3E54" data-color="#2D3E54"></div>
+      <div class="color-swatch" style="background:#C67081" data-color="#C67081"></div>
+      <div class="color-swatch" style="background:#EAC1CB" data-color="#EAC1CB"></div>
+      <div class="color-swatch" style="background:#BFD0DC" data-color="#BFD0DC"></div>
+      <div class="color-swatch" style="background:#6a8faf" data-color="#6a8faf"></div>
+      <div class="color-swatch" style="background:#3a6b50" data-color="#3a6b50"></div>
+      <div class="color-swatch" style="background:#c47a30" data-color="#c47a30"></div>
+      <div class="color-swatch" style="background:#111111" data-color="#111111"></div>
+      <div class="color-swatch" style="background:#ffffff;border:1.5px solid #ccc" data-color="#ffffff"></div>
+    </div>
+    <div class="brush-row">
+      <label>Розмір пензля: <strong id="brushSizeVal">4</strong>px</label>
+      <input type="range" class="brush-slider" id="brushSize" min="1" max="30" value="4">
+      <button class="modal-btn modal-btn-secondary" style="width:auto;padding:7px 16px" onclick="clearCanvas()"><i class="fas fa-trash"></i> Очистити</button>
+    </div>
+    <canvas id="drawingCanvas" width="480" height="300"></canvas>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="modal-btn modal-btn-primary"   onclick="saveDrawing()"><i class="fas fa-check"></i> Зберегти</button>
+      <button class="modal-btn modal-btn-secondary" onclick="closeDrawingModal()">Скасувати</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="translateModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeTranslateModal()">×</button>
+    <div class="modal-title"><i class="fas fa-language" style="color:var(--pink)"></i> Перекласти сторінку</div>
+    <p style="font-size:0.87rem;color:var(--muted);margin-bottom:16px;line-height:1.65">
+      Переклад виконується <strong>прямо у браузері</strong> через Google Translate API —
+      працює на localhost і file:// без жодних налаштувань. Тексти редактора не перекладаються.
+    </p>
+    <div class="lang-grid">
+      <div class="lang-option" onclick="selectLang(this,'en','English')"><span class="flag">🇬🇧</span> English</div>
+      <div class="lang-option" onclick="selectLang(this,'de','Deutsch')"><span class="flag">🇩🇪</span> Deutsch</div>
+      <div class="lang-option" onclick="selectLang(this,'pl','Polski')"><span class="flag">🇵🇱</span> Polski</div>
+      <div class="lang-option" onclick="selectLang(this,'fr','Français')"><span class="flag">🇫🇷</span> Français</div>
+      <div class="lang-option" onclick="selectLang(this,'es','Español')"><span class="flag">🇪🇸</span> Español</div>
+      <div class="lang-option" onclick="selectLang(this,'it','Italiano')"><span class="flag">🇮🇹</span> Italiano</div>
+      <div class="lang-option" onclick="selectLang(this,'cs','Čeština')"><span class="flag">🇨🇿</span> Čeština</div>
+      <div class="lang-option" onclick="selectLang(this,'ro','Română')"><span class="flag">🇷🇴</span> Română</div>
+      <div class="lang-option" onclick="selectLang(this,'ja','日本語')"><span class="flag">🇯🇵</span> 日本語</div>
+      <div class="lang-option" onclick="selectLang(this,'zh-CN','中文')"><span class="flag">🇨🇳</span> 中文</div>
+    </div>
+    <div class="tr-progress" id="trProgress">
+      <div class="tr-prog-label" id="trProgLabel">Перекладаємо…</div>
+      <div class="tr-prog-bar-wrap"><div class="tr-prog-bar" id="trProgBar"></div></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-primary"   id="translateConfirmBtn" onclick="confirmTranslation()" disabled>
+        <i class="fas fa-globe"></i> Перекласти
+      </button>
+      <button class="modal-btn modal-btn-secondary" onclick="resetTranslation()">
+        <i class="fas fa-undo"></i> Оригінал (УК)
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="securityModal">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeSecurityModal()">×</button>
+    <div class="modal-title"><i class="fas fa-shield-alt" style="color:var(--pink)"></i> Перевірка безпеки</div>
+    <div class="sec-score-wrap" id="secScoreWrap">
+      <div class="sec-score-num" id="secScoreNum">—</div>
+      <div class="sec-score-label">Запустіть перевірку для результату</div>
+    </div>
+    <div class="sec-result-list" id="secResultList"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-primary"   onclick="runSecurityCheck()"><i class="fas fa-play"></i> Запустити перевірку</button>
+      <button class="modal-btn modal-btn-secondary" onclick="closeSecurityModal()">Закрити</button>
+    </div>
+  </div>
+</div>
+</body>
+<script src="../js/write.js"></script>
+</html>

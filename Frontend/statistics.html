@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Слово — Статистика</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;500;600;700&family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/Frame 10.png">
+  <link rel="stylesheet" href="../css/statistics.css">
+</head>
+<body>
+<div id="google_translate_element"></div>
+
+<div id="sidebar" class="sdb">
+  <div class="sdh"><h4>Меню</h4><span id="closeSidebar" class="cbt">×</span></div>
+  <ul class="sdm">
+    <li><a href="index.html" class="ml"><span class="mi"><i class="fas fa-home"></i></span> Головна</a></li>
+    <li><a href="user.html" class="ml"><span class="mi"><i class="fas fa-user"></i></span> Акаунт</a></li>
+    <li><a href="my-articles.html" class="ml"><span class="mi"><i class="fas fa-pen-nib"></i></span> Мої статті</a></li>
+    <li><a href="statistics.html" class="ml active"><span class="mi"><i class="fas fa-chart-line"></i></span> Статистика</a></li>
+    <li><a href="write.html" class="ml"><span class="mi"><i class="fas fa-edit"></i></span> Написати</a></li>
+    <div class="ssp"></div>
+    <li><a href="#" id="logoutLink" class="ml lo"><span class="mi"><i class="fas fa-sign-out-alt"></i></span> Вийти</a></li>
+  </ul>
+  <div class="sdf">
+    <div class="sdu">
+      <div class="sda" id="sidebarAvatar"></div>
+      <div><div class="sdun" id="sidebarName">Гість</div><div class="sdur">Читач</div></div>
+    </div>
+  </div>
+</div>
+<div id="sidebarOverlay" class="ov"></div>
+
+<div class="hdr">
+  <div class="lg">
+    <div class="mbtn" id="menuButton"><i class="fas fa-bars"></i></div>
+    <a href="index.html" class="stl"><span class="stt">Слово</span></a>
+  </div>
+  <div class="rg">
+    <a href="user.html" class="ui" id="userInfo">
+      <div class="uav" id="userAvatar"></div>
+      <span class="unm" id="userName">Завантаження…</span>
+    </a>
+  </div>
+</div>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>Статистика</h1>
+    <p id="pageSubtitle">Ваш читацький профіль</p>
+  </div>
+</div>
+
+<div class="content">
+  <div class="container">
+
+    <div class="section-title"><i class="fas fa-tachometer-alt"></i> Загальний огляд</div>
+    <div class="stat-cards" id="overviewCards"></div>
+
+    <div class="section-title"><i class="fas fa-lightbulb"></i> Інсайти</div>
+    <div class="insights-grid" id="insightsGrid"></div>
+
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="chart-card">
+          <div class="chart-title"><i class="fas fa-chart-bar"></i> Активність за останні 7 тижнів</div>
+          <div class="bar-chart" id="activityChart"></div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="streak-display">
+          <div class="streak-fire"><i class="fas fa-fire" style="color:var(--accent)"></i></div>
+          <div class="streak-num" id="streakNum">0</div>
+          <div class="streak-label">Днів поспіль</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title"><i class="fas fa-tags"></i> Категорії прочитаного</div>
+      <div class="cat-bars" id="catChart"></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title"><i class="fas fa-calendar-alt"></i> Карта активності (останній рік)</div>
+      <div class="heatmap" id="heatmap"></div>
+      <div class="hm-legend">
+        <span>Менше</span>
+        <div class="hm-legend-cell" style="background:var(--border)"></div>
+        <div class="hm-legend-cell hm-1"></div>
+        <div class="hm-legend-cell hm-2"></div>
+        <div class="hm-legend-cell hm-3"></div>
+        <div class="hm-legend-cell hm-4"></div>
+        <span>Більше</span>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title"><i class="fas fa-users"></i> Улюблені автори</div>
+      <div id="topAuthors"></div>
+    </div>
+
+  </div>
+</div>
+<div class="tc" id="toastContainer"></div>
+<footer><div class="container"><p>© 2026 Слово — Простір для думок</p></div></footer>
+<script src="../js/statistics.js"></script>
+</body>
+</html>
+

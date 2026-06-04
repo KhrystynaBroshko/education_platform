@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Стаття — Слово</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;500;600;700&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap\" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+<link rel="icon" type="image/png" sizes="32x32" href="images/Frame 10.png">
+<link rel="stylesheet" href="../css/article.css">
+</head>
+<body>
+
+<div class="tip" id="termTip"></div>
+<div id="rp"></div>
+
+<header class="hdr">
+  <a class="logo" href="reading.html">Слово</a>
+  <a class="back" href="reading.html"><i class="bi bi-arrow-left"></i> Усі статті</a>
+</header>
+
+<div class="layout-container">
+  <main>
+    <div id="pageContent">
+      <div class="loading-wrap">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+    
+    <div class="cmt-section" id="commentsWrapper" style="display:none;">
+      <h3>Коментарі</h3>
+      <div id="commentsContainer"></div>
+      <div class="cmt-form">
+        <textarea id="cmt-input" placeholder="Напишіть ваш коментар..."></textarea>
+        <button class="sub-btn" id="cmt-submit">Додати коментар</button>
+      </div>
+    </div>
+  </main>
+
+  <aside class="sidebar-col" id="sidebarWrapper" style="display:none;">
+    <div class="panel-card">
+      <div class="panel-head" onclick="togglePanel(this)">
+        <i class="bi bi-graph-up pi"></i> Аналітика читання
+        <i class="bi bi-chevron-down chevron rotate"></i>
+      </div>
+      <div class="panel-body open">
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="num" id="statWords">0</div>
+            <div class="lbl">Всього слів</div>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="statMinutes">0</div>
+            <div class="lbl">Хв. читання</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="fcContainerWidget"></div>
+    <div id="selfCheckContainerWidget"></div>
+    <div id="quizContainerWidget"></div>
+
+    <div class="panel-card">
+      <div class="panel-head" onclick="togglePanel(this)">
+        <i class="bi bi-activity pi"></i> Мій прогрес
+        <i class="bi bi-chevron-down chevron rotate"></i>
+      </div>
+      <div class="panel-body open">
+        <div class="sec-label">Читання матеріалу</div>
+        <div class="pbar-wrap"><div class="pbar-fill" id="readFill" style="width:0%"></div></div>
+        <div class="pbar-labels"><span>Початок</span><span id="readPct">0%</span></div>
+        <div class="sec-label" style="margin-top:14px">Результат тестів</div>
+        <div class="pbar-wrap"><div class="pbar-fill" id="quizFill" style="width:0%;background:linear-gradient(90deg,#3a6b50,var(--detail))"></div></div>
+        <div class="pbar-labels"><span>Середнє</span><span id="quizPct">—</span></div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-head" onclick="togglePanel(this)">
+        <i class="bi bi-trophy pi"></i> Досягнення
+        <i class="bi bi-chevron-down chevron"></i>
+      </div>
+      <div class="panel-body" id="achGrid"></div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-head" onclick="togglePanel(this)">
+        <i class="bi bi-compass pi"></i> Рекомендовано вам
+        <i class="bi bi-chevron-down chevron rotate"></i>
+      </div>
+      <div class="panel-body open" id="recsWrap"></div>
+    </div>
+  </aside>
+</div>
+
+<div id="selectionMenu">
+  <div class="menu-btn hl-yellow" onclick="highlightSelection('hl-yellow')" style="background:#f5dc32" title="Жовтий"></div>
+  <div class="menu-btn hl-rose" onclick="highlightSelection('hl-rose')" style="background:#C67081" title="Рожевий"></div>
+  <div class="menu-btn hl-blue" onclick="highlightSelection('hl-blue')" style="background:#BFD0DC" title="Блакитний"></div>
+  <div class="menu-btn hl-green" onclick="highlightSelection('hl-green')" style="background:#3a6b50" title="Зелений"></div>
+  <button class="menu-ai-btn" onclick="askAiForSelection()"><i class="bi bi-robot"></i> Запитати AI</button>
+  <button style="background:none; border:none; color:white; cursor:pointer; padding:0 4px;" onclick="clearSelectionHighlight()"><i class="bi bi-eraser"></i></button>
+</div>
+
+<div class="ai-assistant-panel" id="aiPanel">
+  <div class="aip-head">
+    <i class="bi bi-robot pi"></i> AI-помічник <span id="ollamaBadge" class="ollama-badge">Перевірка...</span>
+    <button class="aip-close" onclick="toggleAiPanel()"><i class="bi bi-x"></i></button>
+  </div>
+  <div class="aip-context" id="aipContext"></div>
+  <div class="aip-actions">
+    <button class="aip-act-btn" onclick="aiAsk('Поясни цей фрагмент простими словами')">📖 Поясни</button>
+    <button class="aip-act-btn" onclick="aiAsk('Зроби коротко, 1-2 речення')">✂️ Коротко</button>
+    <button class="aip-act-btn" onclick="aiAsk('Дай конкретний приклад')">💡 Приклад</button>
+  </div>
+  <div class="aip-messages" id="aipMessages">
+    <div class="aip-msg ai">Привіт! Виділіть текст або задайте власне запитання — я проаналізую вміст за допомогою моделі Gemma.</div>
+  </div>
+  <div class="aip-input-row">
+    <input class="aip-inp" id="aipInp" placeholder="Запитайте про статтю..." onkeydown="if(event.key==='Enter')aiSend()">
+    <button class="aip-send" onclick="aiSend()"><i class="bi bi-send"></i></button>
+  </div>
+</div>
+
+<button class="ai-fab" id="aiFab" onclick="toggleAiPanel()"><i class="bi bi-robot"></i></button>
+<button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+<div class="tc" id="tc"></div>
+
+<footer>© 2026 Слово — Літературний портал</footer>
+
+<script src="../js/article.js"></script>
+</body>
+</html>

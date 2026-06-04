@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Слово — Адмін Панель</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600&family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/Frame 10.png">
+  <link rel="stylesheet" href="../css/admin_page.css">
+</head>
+<body>
+<div class="modal-overlay" id="aiConfirmModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2>Публікація статті</h2>
+      <div class="modal-subtitle" id="modalArticlePreview">Оберіть режим публікації</div>
+    </div>
+
+    <div class="ai-choice-grid">
+      <div class="ai-choice-card ai-card" id="choiceAI" onclick="selectChoice('ai')">
+        <div class="choice-badge">Рекомендовано</div>
+        <div class="choice-check"><i class="fas fa-check"></i></div>
+        <div class="choice-icon"><i class="fas fa-brain"></i></div>
+        <h3>З AI-покращенням</h3>
+        <p>Gemma3:1b розширить та збагатить зміст статті перед публікацією</p>
+      </div>
+      <div class="ai-choice-card plain-card" id="choicePlain" onclick="selectChoice('plain')">
+        <div class="choice-check"><i class="fas fa-check"></i></div>
+        <div class="choice-icon"><i class="fas fa-file-alt"></i></div>
+        <h3>Оригінальний текст</h3>
+        <p>Опублікувати статтю без змін — саме так, як написав автор</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <span class="modal-article-title" id="modalTitlePreview">—</span>
+      <button class="modal-btn modal-btn-cancel" onclick="closeAIModal()">Скасувати</button>
+      <button class="modal-btn modal-btn-confirm" id="modalConfirmBtn" onclick="doConfirmArticle()" disabled>
+        <i class="fas fa-check"></i> Підтвердити
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="gen-overlay" id="genOverlay">
+  <div class="gen-box">
+    <h3 id="genTitle">Публікація статті</h3>
+    <p id="genMsg">Будь ласка, зачекайте…</p>
+    <div class="gen-dots" id="genDots"><span></span><span></span><span></span></div>
+    <div class="gen-steps">
+      <div class="gen-step pending" id="step1"><div class="step-icon"><i class="fas fa-brain"></i></div><span id="step1Text">AI генерація розширеного контенту</span></div>
+      <div class="gen-step pending" id="step2"><div class="step-icon"><i class="fas fa-database"></i></div><span>Збереження на сайт</span></div>
+      <div class="gen-step pending" id="step3"><div class="step-icon"><i class="fas fa-check-circle"></i></div><span>Готово — стаття доступна для читачів</span></div>
+    </div>
+    <div class="gen-link" id="genLink">
+      <a href="#" id="genLinkA" target="_blank"><i class="fas fa-book-open"></i> Читати статтю</a>
+      <br>
+      <button class="gen-close-btn" onclick="document.getElementById('genOverlay').classList.remove('show')">Закрити</button>
+    </div>
+  </div>
+</div>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span>Слово</span>
+    <small>Сторінка адміністратора</small>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-label">Головне</div>
+    <button class="nav-link active" data-section="dashboard"><span class="ni"><i class="fas fa-th-large"></i></span> Панель керування</button>
+    <button class="nav-link" data-section="manage-articles"><span class="ni"><i class="fas fa-newspaper"></i></span> Статті</button>
+    <button class="nav-link" data-section="pending-articles"><span class="ni"><i class="fas fa-clock"></i></span> На підтвердження<span class="nav-badge" id="pendingBadge">0</span></button>
+    <div class="nav-group-label" style="margin-top:6px">Користувачі</div>
+    <button class="nav-link" data-section="manage-users"><span class="ni"><i class="fas fa-users"></i></span> Користувачі</button>
+    <div class="sidebar-sep"></div>
+    <a href="write.html" class="nav-link"><span class="ni"><i class="fas fa-pen"></i></span> Додати статтю</a>
+    <a href="reading.html" class="nav-link"><span class="ni"><i class="fas fa-book-open"></i></span> Читати статті</a>
+    <button class="nav-link" id="logoutBtn"><span class="ni"><i class="fas fa-sign-out-alt"></i></span> Вийти</button>
+  </nav>
+  <div class="sidebar-footer">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="sidebar-avatar" id="adminAvatar">A</div>
+      <div>
+        <div class="sidebar-uname" id="adminName">Адміністратор</div>
+        <div class="sidebar-urole">Адмін</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="main-wrap">
+  <header class="topbar">
+    <div class="topbar-title" id="topbarTitle">Панель керування</div>
+    <div class="topbar-actions">
+      <a href="write.html" class="tb-btn tb-btn-rose"><i class="fas fa-plus"></i> Нова стаття</a>
+      <a href="reading.html" class="tb-btn tb-btn-outline"><i class="fas fa-arrow-right"></i> На сайт</a>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <div class="section active" id="dashboard">
+      <div class="page-header">
+        <h1>Панель керування</h1>
+        <p>Підтверджені статті автоматично з'являються на reading.html</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-alt"></i></div><div class="stat-label">Всього статей</div><div class="stat-number" id="totalArticles">—</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-hourglass-half"></i></div><div class="stat-label">На підтвердження</div><div class="stat-number" id="pendingCount">—</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-label">Користувачів</div><div class="stat-number" id="totalUsers">—</div></div>
+      </div>
+      <div class="dash-grid">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Останні дії</span></div>
+          <div class="panel-body"><ul class="activity-list" id="recentActivities"><li class="activity-item"><div class="act-dot"></div><div><div class="act-text">Завантаження…</div></div></li></ul></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Швидкі дії</span></div>
+          <div class="panel-body" style="padding:22px 26px;display:flex;flex-direction:column;gap:12px;">
+            <button class="btn btn-confirm" style="width:100%;justify-content:center;padding:12px;font-size:.97rem" onclick="navigate('manage-articles')"><i class="fas fa-newspaper"></i> Керувати статтями</button>
+            <button class="btn btn-edit" style="width:100%;justify-content:center;padding:12px;font-size:.97rem" onclick="navigate('pending-articles')"><i class="fas fa-clock"></i> Переглянути очікуючі</button>
+            <a href="reading.html" class="btn btn-view" style="width:100%;justify-content:center;padding:12px;font-size:.97rem"><i class="fas fa-book-open"></i> Відкрити reading.html</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="manage-articles">
+      <div class="page-header"><h1>Управління статтями</h1><p>Переглядайте, редагуйте та архівуйте статті.</p></div>
+      <div class="panel">
+        <div class="tab-bar">
+          <button class="tab-btn active" data-tab="published">Опубліковані</button>
+          <button class="tab-btn" data-tab="drafts">Чернетки</button>
+          <button class="tab-btn" data-tab="archived">Архів</button>
+        </div>
+        <div class="search-wrap">
+          <div class="search-wrap-inner"><i class="fas fa-search"></i><input type="text" class="search-box" id="articleSearch" placeholder="Пошук статей…"></div>
+        </div>
+        <div class="panel-body">
+          <div id="published-articles"></div>
+          <div id="drafts-articles" style="display:none"></div>
+          <div id="archived-articles" style="display:none"></div>
+        </div>
+        <div class="pagination hidden" id="articlePagination"></div>
+      </div>
+    </div>
+
+    <div class="section" id="pending-articles">
+      <div class="page-header">
+        <h1>Статті на підтвердження</h1>
+        <p>Оберіть режим публікації для кожної статті — з AI-покращенням або оригінальний текст.</p>
+      </div>
+      <div class="panel"><div class="panel-body" id="articlesForConfirmation"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Завантаження…</p></div></div></div>
+    </div>
+
+    <div class="section" id="manage-users">
+      <div class="page-header"><h1>Управління користувачами</h1><p>Профілі та доступ.</p></div>
+      <div class="panel">
+        <div class="search-wrap"><div class="search-wrap-inner"><i class="fas fa-search"></i><input type="text" class="search-box" id="userSearch" placeholder="Пошук…"></div></div>
+        <div class="panel-body" id="usersList"></div>
+        <div class="pagination hidden" id="usersPagination"></div>
+      </div>
+    </div>
+
+  </main>
+  <footer>© 2026 Слово — Адмін Панель</footer>
+</div>
+<div class="toast-container" id="toastContainer"></div>
+<script src="../js/admin_page.js"></script>
+</body>
+</html>
