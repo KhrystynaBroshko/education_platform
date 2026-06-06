@@ -519,29 +519,63 @@ function initRecommendations(curr) {
 
 function initCommentsSystem(artId) {
   const container = document.getElementById('commentsContainer');
-  const loadCmts = () => {
-    const arr = JSON.parse(localStorage.getItem(`slovo_cmts_${artId}`) || '[]');
-    if(!arr.length) {
+  const BASE = window.location.origin;
+
+  const renderCmts = (arr) => {
+    if (!arr.length) {
       container.innerHTML = '<p style="font-size:0.8rem; color:var(--muted); font-style:italic;">Напишіть першу думку!</p>';
       return;
     }
-    container.innerHTML = arr.map(c => `
+    container.innerHTML = arr.map(c => {
+      const date = new Date(c.created_at).toLocaleDateString('uk-UA');
+      return `
       <div class="cmt">
-        <div class="cmt-hdr"><div class="cmt-av" style="background:#2E3F55; color:white">${c.user.charAt(0)}</div><strong>${c.user}</strong><em>${c.date}</em></div>
+        <div class="cmt-hdr"><div class="cmt-av" style="background:#2E3F55; color:white">${c.username.charAt(0).toUpperCase()}</div><strong>${c.username}</strong><em>${date}</em></div>
         <p>${c.text}</p>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   };
-  
-  document.getElementById('cmt-submit').onclick = () => {
+
+  const loadCmts = async () => {
+    try {
+      const res = await fetch(`${BASE}/comments?article_id=${artId}`);
+      const arr = await res.json();
+      renderCmts(Array.isArray(arr) ? arr : []);
+    } catch {
+      container.innerHTML = '<p style="font-size:0.8rem; color:var(--muted); font-style:italic;">Не вдалося завантажити коментарі.</p>';
+    }
+  };
+
+  document.getElementById('cmt-submit').onclick = async () => {
     const inp = document.getElementById('cmt-input');
-    if(!inp.value.trim()) return;
-    const arr = JSON.parse(localStorage.getItem(`slovo_cmts_${artId}`) || '[]');
-    arr.push({ user: 'Слухач', text: inp.value.trim(), date: new Date().toLocaleDateString('uk-UA') });
-    localStorage.setItem(`slovo_cmts_${artId}`, JSON.stringify(arr));
-    inp.value = '';
-    loadCmts();
-    unlock('noter');
+    const text = inp.value.trim();
+    if (!text) return;
+
+    const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
+    const username = storedUser?.nickname || storedUser?.name || storedUser?.email?.split('@')[0] || 'Гість';
+
+    const btn = document.getElementById('cmt-submit');
+    btn.disabled = true;
+    btn.textContent = 'Надсилаємо…';
+
+    try {
+      const res = await fetch(`${BASE}/add-comment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, username, article_id: artId })
+      });
+      if (!res.ok) throw new Error();
+      inp.value = '';
+      unlock('noter');
+      await loadCmts();
+    } catch {
+      alert('Не вдалося надіслати коментар. Спробуйте ще раз.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Додати коментар';
+    }
   };
+
   loadCmts();
 }
 

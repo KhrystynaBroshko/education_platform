@@ -320,24 +320,46 @@ app.post("/subscribe", async (req, res) => {
 });
 
 app.post("/add-comment", async (req, res) => {
-  const { text, username } = req.body;
+  const { text, username, article_id } = req.body;
+
+  if (!text || !username || !article_id) {
+    return res.status(400).json({
+      error: "text, username та article_id є обов'язковими"
+    });
+  }
+
   try {
     await pool.query(
-      "INSERT INTO comments (text, username, created_at) VALUES ($1, $2, NOW())",
-      [text, username]
+      "INSERT INTO comments (text, username, article_id, created_at) VALUES ($1, $2, $3, NOW())",
+      [text, username, article_id]
     );
-    res.status(201).json({ message: "Коментар успішно додано!" });
+
+    res.status(201).json({
+      message: "Коментар успішно додано!"
+    });
   } catch (error) {
     console.error("Помилка при додаванні коментаря:", error);
-    res.status(500).json({ error: "Не вдалося додати коментар" });
+
+    res.status(500).json({
+      error: "Не вдалося додати коментар"
+    });
   }
 });
 
 app.get("/comments", async (req, res) => {
+  const { article_id } = req.query;
   try {
-    const result = await pool.query(
-      "SELECT text, username, created_at FROM comments ORDER BY created_at DESC"
-    );
+    let result;
+    if (article_id) {
+      result = await pool.query(
+        "SELECT text, username, created_at FROM comments WHERE article_id = $1 ORDER BY created_at ASC",
+        [article_id]
+      );
+    } else {
+      result = await pool.query(
+        "SELECT text, username, created_at FROM comments ORDER BY created_at DESC"
+      );
+    }
     res.json(result.rows);
   } catch (error) {
     console.error("Помилка при отриманні коментарів:", error);
