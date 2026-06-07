@@ -517,26 +517,37 @@ function addActivity(text) {
 }
 
 async function displayRecentActivities() {
-  const localLog = JSON.parse(localStorage.getItem(ACTIVITY_KEY) || '[]');
-  const apiActs  = await apiFetch('/admin-logs');
   const el = document.getElementById('recentActivities');
+  el.innerHTML = `<li class="activity-item"><div class="act-dot"></div><div><div class="act-text">Завантаження…</div></div></li>`;
 
-  const acts = localLog.length ? localLog : (apiActs || [
-    { text: 'Підтверджено «Мистецтво уваги» — з\'явилось на reading.html', time: new Date(Date.now()-36000000).toISOString() },
-    { text: 'Зареєстровано sonya@example.com', time: new Date(Date.now()-54000000).toISOString() },
-    { text: '«Між рядками» — відправлено на перевірку', time: new Date(Date.now()-86400000).toISOString() },
-  ]);
+  const apiActs = await apiFetch('/admin-logs');
+  const localLog = JSON.parse(localStorage.getItem(ACTIVITY_KEY) || '[]');
+
+  let acts = [];
+  if (apiActs && apiActs.length) {
+    acts = apiActs.map(a => ({
+      text: a.action_details || a.action_type || '—',
+      time: a.created_at,
+    }));
+  } else if (localLog.length) {
+    acts = localLog;
+  }
 
   if (!acts.length) {
     el.innerHTML = `<li class="activity-item"><div class="act-dot"></div><div><div class="act-text">Немає активності</div></div></li>`;
     return;
   }
   el.innerHTML = acts.slice(0, 8).map(a => {
-    const mins = Math.floor((Date.now() - new Date(a.time||a.created_at)) / 60000);
-    const timeStr = mins < 60 ? `${mins} хв. тому` : `${Math.floor(mins/60)} год. тому`;
-    return `<li class="activity-item"><div class="act-dot"></div><div><div class="act-text">${escapeHtml(a.text||a.action_details)}</div><div class="act-time">${timeStr}</div></div></li>`;
+    const diff = Date.now() - new Date(a.time).getTime();
+    const mins = Math.floor(diff / 60000);
+    const timeStr = mins < 1 ? 'щойно'
+      : mins < 60 ? `${mins} хв. тому`
+      : mins < 1440 ? `${Math.floor(mins / 60)} год. тому`
+      : `${Math.floor(mins / 1440)} дн. тому`;
+    return `<li class="activity-item"><div class="act-dot"></div><div><div class="act-text">${escapeHtml(a.text)}</div><div class="act-time">${timeStr}</div></div></li>`;
   }).join('');
 }
+
 
 document.getElementById('articleSearch')?.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();

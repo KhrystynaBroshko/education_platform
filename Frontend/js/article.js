@@ -520,7 +520,7 @@ function initRecommendations(curr) {
 function initCommentsSystem(artId) {
   const container = document.getElementById('commentsContainer');
   const BASE = window.location.origin;
-
+ 
   const renderCmts = (arr) => {
     if (!arr.length) {
       container.innerHTML = '<p style="font-size:0.8rem; color:var(--muted); font-style:italic;">Напишіть першу думку!</p>';
@@ -535,7 +535,7 @@ function initCommentsSystem(artId) {
       </div>`;
     }).join('');
   };
-
+ 
   const loadCmts = async () => {
     try {
       const res = await fetch(`${BASE}/comments?article_id=${artId}`);
@@ -545,24 +545,24 @@ function initCommentsSystem(artId) {
       container.innerHTML = '<p style="font-size:0.8rem; color:var(--muted); font-style:italic;">Не вдалося завантажити коментарі.</p>';
     }
   };
-
+ 
   document.getElementById('cmt-submit').onclick = async () => {
     const inp = document.getElementById('cmt-input');
     const text = inp.value.trim();
     if (!text) return;
-
+ 
     const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
     const username = storedUser?.nickname || storedUser?.name || storedUser?.email?.split('@')[0] || 'Гість';
-
+ 
     const btn = document.getElementById('cmt-submit');
     btn.disabled = true;
     btn.textContent = 'Надсилаємо…';
-
+ 
     try {
       const res = await fetch(`${BASE}/add-comment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, username, article_id: artId })
+        body: JSON.stringify({ text, user_id: storedUser?.id, article_id: artId })
       });
       if (!res.ok) throw new Error();
       inp.value = '';
@@ -575,7 +575,7 @@ function initCommentsSystem(artId) {
       btn.textContent = 'Додати коментар';
     }
   };
-
+ 
   loadCmts();
 }
 

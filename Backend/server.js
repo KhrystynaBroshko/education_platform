@@ -320,32 +320,24 @@ app.post("/subscribe", async (req, res) => {
 });
 
 app.post("/add-comment", async (req, res) => {
-  const { text, username, article_id } = req.body;
-
-  if (!text || !username || !article_id) {
-    return res.status(400).json({
-      error: "text, username та article_id є обов'язковими"
-    });
-  }
-
+  const { text, user_id, article_id } = req.body;
+  if (!text || !user_id || !article_id)
+    return res.status(400).json({ error: "text, user_id та article_id є обов'язковими" });
   try {
+    const userRes = await pool.query("SELECT nickname FROM users WHERE id = $1", [user_id]);
+    if (!userRes.rows.length) return res.status(404).json({ error: "Користувача не знайдено" });
+    const username = userRes.rows[0].nickname;
     await pool.query(
-      "INSERT INTO comments (text, username, article_id, created_at) VALUES ($1, $2, $3, NOW())",
-      [text, username, article_id]
+      "INSERT INTO comments (text, username, user_id, article_id, created_at) VALUES ($1, $2, $3, $4, NOW())",
+      [text, username, user_id, article_id]
     );
-
-    res.status(201).json({
-      message: "Коментар успішно додано!"
-    });
+    res.status(201).json({ message: "Коментар успішно додано!" });
   } catch (error) {
     console.error("Помилка при додаванні коментаря:", error);
-
-    res.status(500).json({
-      error: "Не вдалося додати коментар"
-    });
+    res.status(500).json({ error: "Не вдалося додати коментар" });
   }
 });
-
+ 
 app.get("/comments", async (req, res) => {
   const { article_id } = req.query;
   try {
