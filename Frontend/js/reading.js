@@ -510,7 +510,10 @@ window.handleLike=async function(id,btn){
     if(!isLiked){const i=btn.querySelector('i');if(i){i.style.animation='none';requestAnimationFrame(()=>{i.style.animation='hpop .4s ease';});}}
   }
   document.getElementById('statLikes').textContent=allArticles.reduce((s,a)=>s+(a.likes||0),0);
-  try{await fetch(`http://localhost:5012/articles/${id}/like`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser.email})});}catch{}
+  try{
+    const r=await fetch(`http://localhost:5012/api/articles/${id}/like`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser.name||currentUser.nickname})});
+    if(r.ok){const updated=await r.json();art.likes=updated.likes??art.likes;if(btn){const lc=btn.querySelector('.lc');if(lc)lc.textContent=art.likes;}document.getElementById('statLikes').textContent=allArticles.reduce((s,a)=>s+(a.likes||0),0);}
+  }catch{}
   toast(!isLiked?`♥ ${t('liked')}`:`♡ ${t('unliked')}`);
 };
 
@@ -522,23 +525,25 @@ window.handleSave=function(id,btn){
   saveUserData(ud);if(btn)btn.classList.toggle('saved',!isSaved);
 };
 
-window.toggleFollow=function(n,btn){
+window.toggleFollow=async function(n,btn){
   if(!currentUser||!n){openLM();return;}
-  if(!authors[n])return;
+  if(!authors[n])authors[n]={followers:0,followedBy:[]};
   const ud=getUserData();const isF=ud.follows.includes(n);
   if(isF){
     ud.follows=ud.follows.filter(x=>x!==n);authors[n].followers=Math.max(0,authors[n].followers-1);
-    if(authors[n].followedBy)authors[n].followedBy=authors[n].followedBy.filter(e=>e!==currentUser.email);
     toast(`${t('unfollowed')} ${n}`);
   }else{
     ud.follows.push(n);authors[n].followers++;
-    if(!authors[n].followedBy)authors[n].followedBy=[];authors[n].followedBy.push(currentUser.email);
     toast(`✓ ${t('followed')} ${n}`,'s');
   }
   saveUserData(ud);
   if(btn){btn.classList.toggle('following',!isF);const i=btn.querySelector('i');if(i)i.className=`fas ${!isF?'fa-user-check':'fa-user-plus'}`;btn.title=!isF?t('unsubscribe'):t('subscribe');}
   const fcEl=document.getElementById(`follow-count-${n.replace(/\s/g,'-')}`);
   if(fcEl)fcEl.textContent=`${authors[n].followers} ${t('readers')}`;
+  try{
+    const r=await fetch(`http://localhost:5012/api/authors/${encodeURIComponent(n)}/follow`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser.name||currentUser.nickname})});
+    if(r.ok){const res=await r.json();if(res?.followers!==undefined){authors[n].followers=res.followers;const fcEl2=document.getElementById(`follow-count-${n.replace(/\s/g,'-')}`);if(fcEl2)fcEl2.textContent=`${res.followers} ${t('readers')}`;}}
+  }catch{}
 };
 
 window.trackRead=function(id){

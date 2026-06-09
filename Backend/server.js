@@ -588,19 +588,19 @@ app.post("/api/articles/:id/like", async (req, res) => {
   try {
     const checkLike = await pool.query("SELECT liked_by FROM articles WHERE id = $1", [id]);
     let likedBy = checkLike.rows[0].liked_by || [];
-
-    if (likedBy.includes(username)) {
-      likedBy = likedBy.filter((user) => user !== username);
+    const followTags = likedBy.filter(u => u.startsWith("follow:"));
+    const likeTags = likedBy.filter(u => !u.startsWith("follow:"));
+ 
+    if (likeTags.includes(username)) {
       const result = await pool.query(
         "UPDATE articles SET likes = likes - 1, liked_by = $1 WHERE id = $2 RETURNING *",
-        [likedBy, id]
+        [[...likeTags.filter(u => u !== username), ...followTags], id]
       );
       res.json(result.rows[0]);
     } else {
-      likedBy.push(username);
       const result = await pool.query(
         "UPDATE articles SET likes = likes + 1, liked_by = $1 WHERE id = $2 RETURNING *",
-        [likedBy, id]
+        [[...likeTags, username, ...followTags], id]
       );
       res.json(result.rows[0]);
     }
@@ -613,28 +613,43 @@ app.post("/api/articles/:id/like", async (req, res) => {
 app.post("/api/authors/:author/follow", async (req, res) => {
   const { author } = req.params;
   const { username } = req.body;
+  if (!author || !username) return res.status(400).json({ error: "author і username обов'язкові" });
   try {
-    const checkAuthor = await pool.query(
-      "SELECT followed_by, followers FROM authors WHERE name = $1",
+    const check = await pool.query(
+      "SELECT followers, liked_by FROM articles WHERE author = $1 AND status = 'published' LIMIT 1",
       [author]
     );
-    let followedBy = checkAuthor.rows[0].followed_by || [];
-
-    if (followedBy.includes(username)) {
-      followedBy = followedBy.filter((user) => user !== username);
-      const result = await pool.query(
-        "UPDATE authors SET followers = followers - 1, followed_by = $1 WHERE name = $2 RETURNING *",
-        [followedBy, author]
+    if (!check.rows.length) return res.status(404).json({ error: "Автора не знайдено" });
+ 
+    const currentFollowers = check.rows[0].followers || 0;
+    const likedBy = check.rows[0].liked_by || [];
+    const followTag = `follow:${username}`;
+    const isFollowing = likedBy.includes(followTag);
+ 
+    let newFollowers;
+    if (isFollowing) {
+      newFollowers = Math.max(0, currentFollowers - 1);
+      await pool.query(
+        "UPDATE articles SET followers = $1, liked_by = array_remove(liked_by, $2) WHERE author = $3",
+        [newFollowers, followTag, author]
       );
-      res.json(result.rows[0]);
+      await pool.query(
+        "UPDATE articles SET following = GREATEST(0, following - 1) WHERE author = $1",
+        [username]
+      );
     } else {
-      followedBy.push(username);
-      const result = await pool.query(
-        "UPDATE authors SET followers = followers + 1, followed_by = $1 WHERE name = $2 RETURNING *",
-        [followedBy, author]
+      newFollowers = currentFollowers + 1;
+      await pool.query(
+        "UPDATE articles SET followers = $1, liked_by = array_append(liked_by, $2) WHERE author = $3",
+        [newFollowers, followTag, author]
       );
-      res.json(result.rows[0]);
+      await pool.query(
+        "UPDATE articles SET following = following + 1 WHERE author = $1",
+        [username]
+      );
     }
+ 
+    res.json({ followers: newFollowers, following: !isFollowing });
   } catch (error) {
     console.error("Error handling follow:", error);
     res.status(500).json({ error: "Internal server error" });
